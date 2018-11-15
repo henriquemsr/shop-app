@@ -1,0 +1,137 @@
+<ion-header *ngIf="showMsg === false">
+  <div class="wrap-header bg-teal">
+    <span (click)="goBack()">
+      <svg style="width:32px;height:32px" viewBox="0 0 24 24">
+        <path fill="#ccc" d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" />
+      </svg>
+    </span>
+    <span class="fs2 white">Fazer Pedido</span>
+    <span>
+    </span>
+  </div>
+
+</ion-header>
+
+
+<div class="modal" [ngClass]="{'zoom-modal' : animeModal}" *ngIf="showMsg === true">
+  <span class="close-modal">
+    <svg style="width:45px;height:45px" viewBox="0 0 24 24" (click)="closeModal()">
+      <path fill="#fff" d="M13.46,12L19,17.54V19H17.54L12,13.46L6.46,19H5V17.54L10.54,12L5,6.46V5H6.46L12,10.54L17.54,5H19V6.46L13.46,12Z"
+      />
+    </svg>
+  </span>
+  <div class="box-modal-msg-cart">
+    <span class="fs2 green central">
+      Desistir desta compra?
+    </span>
+
+    <div class="box-modal">
+      <span>
+        <img class="img-modal" src="{{imgBusiness}}" alt="">
+      </span>
+      <span>
+        <span>{{name}}</span>
+        <span>Total: {{totalOrder | currency:'BRL':true}}</span>
+      </span>
+      <span>
+        <svg style="width:32px;height:32px" viewBox="0 0 24 24" (click)="showInfo()">
+          <path fill="#444" d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" />
+        </svg>
+      </span>
+    </div>
+    <div class="info" [ngClass]="{'down' : info}" *ngIf="info === true">
+      As informações desta compra ficam salvas em Pedidos não confirmados, você pode reavê-la a qualquer momento.
+    </div>
+
+    <div class="wrap-bt-modal">
+      <span class="border-brown brown" (click)="closePage()">sim</span>
+      <span class="border-brown brown" (click)="closeModal()">não</span>
+    </div>
+  </div>
+</div>
+<ion-content>
+  <div class="show-load" *ngIf="loadBt === true">
+    <img src="image/load-bt.gif" alt="">
+  </div>
+  <div class="show-load" *ngIf="load === true">
+    <img src="image/load.gif" alt="">
+  </div>
+  <div class="mt20 central fs2 green">{{name}}</div>
+  <div class="bg-white stoped wrap-search z-front">
+    <span>
+      <input type="text" class="input-pa border-light-green" placeholder="Pesquise um produto" [(ngModel)]="pp" (keyup)="onKeySearch($event)">
+    </span>
+    <span *ngIf="palavra === false">
+      <svg style="width:34px;height:34px" viewBox="0 0 24 24">
+        <path fill="#444" d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z"
+        />
+      </svg>
+    </span>
+    <span *ngIf="palavra === true">
+      <svg style="width:34px;height:34px" viewBox="0 0 24 24" (click)="closeSearch()">
+        <path fill="#DE5246" d="M13.46,12L19,17.54V19H17.54L12,13.46L6.46,19H5V17.54L10.54,12L5,6.46V5H6.46L12,10.54L17.54,5H19V6.46L13.46,12Z"
+        />
+      </svg>
+    </span>
+  </div>
+  <div class="wrap-sub-categ">
+    <section class="wrap-sub-categ-section">
+      <div class="sub-cat-content" (click)="listProducts(idBusiness)">todas</div>
+      <div class="sub-cat-content" *ngFor="let data of subCateg">
+        <span (click)="listBySub(data.id_estab,data.id_sub_cat)">
+          {{data.nome_sub_cat}}
+        </span>
+      </div>
+    </section>
+  </div>
+  <div class="mt20"></div>
+
+
+
+  <div *ngFor="let data of products | search: pp">
+    <div class="box-found">
+      <div class="box-found-body-product">
+        <span>
+          <img src="{{data.img_prod}}" alt="">
+        </span>
+        <span class="box-inner-produts">
+          <span class="fs3 green">{{data.nome_produto}}</span>
+          <span class="fs3 brown">{{data.vlr_produto | currency:'BRL':true}}</span>
+          <span class="logic">
+            <div class="logic-buttons">
+              <span (click)="less(data)">-</span>
+              <span (click)="add(data)">+</span>
+            </div>
+          </span>
+        </span>
+      </div>
+      <div class="box-result-front">        
+        <div class="vlr bg-white brown animated-fast slideInLeft" *ngIf="data.qtd > 0">
+          <span class="fs1 teal">{{data.vlr_produto * data.qtd | currency:'BRL':true}}</span>
+          <span class="fs1 teal">tipo: {{data.tipo_prod}} - un: {{data.qtd}}</span>
+        </div>
+        <span class="add-cart animated-fast slideInRight" *ngIf="data.qtd > 0" (click)="addCart(data.vlr_produto * data.qtd,data)">adicionar ao carrinho</span>
+      </div>
+      <div class="box-found-send-product">
+        <button ion-button (click)="regularShare(data.nome_produto,data.vlr_produto)">Compartilhar</button>
+      </div>
+    </div>
+  </div>
+  <div class="clearfix-footer-cart"></div>
+
+</ion-content>
+  <div class="footer-cart" [ngClass]="{'slide-up' : animeBlock}" *ngIf="orderCount > 0" (click)="showCart()">
+    <div>
+      <span class="bt-pa border-white white">FINALIZAR PEDIDO</span>
+    </div>
+    <div>
+      Total: {{totalOrder | currency:'BRL':true}}
+    </div>
+    <div>
+      <svg style="width:42px;height:42px" viewBox="0 0 24 24">
+        <path fill="#DEF3FA" d="M17,18A2,2 0 0,1 19,20A2,2 0 0,1 17,22C15.89,22 15,21.1 15,20C15,18.89 15.89,18 17,18M1,2H4.27L5.21,4H20A1,1 0 0,1 21,5C21,5.17 20.95,5.34 20.88,5.5L17.3,11.97C16.96,12.58 16.3,13 15.55,13H8.1L7.2,14.63L7.17,14.75A0.25,0.25 0 0,0 7.42,15H19V17H7C5.89,17 5,16.1 5,15C5,14.65 5.09,14.32 5.24,14.04L6.6,11.59L3,4H1V2M7,18A2,2 0 0,1 9,20A2,2 0 0,1 7,22C5.89,22 5,21.1 5,20C5,18.89 5.89,18 7,18M16,11L18.78,6H6.14L8.5,11H16Z"
+        />
+      </svg>
+      <b class="number" [ngClass]="{'anime-cart' : animeCart}">{{orderCount}}</b>
+    </div>
+  </div>

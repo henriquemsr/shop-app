@@ -1,0 +1,30 @@
+<ion-content>
+  <div class="central">
+    <img width="50%" height="auto" src="image/logotipo.png" alt="">
+  </div>
+  <span class="central teal fs2">LOGIN</span>
+  <div class="wrap-input">
+    <input type="text" [(ngModel)]="username" class="input-pa border-brown blue" placeholder="Email">
+    <input type="password" [(ngModel)]="password" class="input-pa border-brown blue" placeholder="Senha">
+  </div>
+  <div class="wrap-button">
+    <span class="bt-pa border-blue blue fs2" (click)="logar()">ENTRAR</span>
+    <!-- <span class="bt-pa border-blue blue fs2" (click)="goHome()">ENTRAR</span> -->
+  </div>
+  <div class="left">
+    <span class="ml10 mt10 blue" (click)="goCad()">
+      Cadastre-se
+    </span>
+  </div>
+  <span class="central brown mt20">OU ENTRE COM:</span>
+  <div class="social">
+    <span class="bg-red white" (click)="loginGoogle()">Google</span>
+    <span class="bg-blue white" (click)="loginface()">Facebook</span>
+
+  </div>
+</ion-content>
+<div class="modal" *ngIf="loadLogin === true">
+  <span class="align-load">
+    <img src="image/load.gif" alt="">
+  </span>
+</div>

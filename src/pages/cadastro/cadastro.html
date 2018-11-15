@@ -1,0 +1,27 @@
+<ion-header>
+    <div class="wrap-header bg-light-green">
+      <span></span>
+      <span class="fs2 white">Cadastro</span>
+      <span class="fs2 white" ><a (click)="goBack()">Voltar</a></span>
+    </div>
+  </ion-header>
+
+
+  <ion-content>
+    <div class="wrap-input">
+      <input type="text" class="input-pa border-brown green"  [(ngModel)]="nome" placeholder="Nome" (keydown)="checkCampos($event)">
+      <span style="color:red">{{msnome}} </span>
+      <input type="email" class="input-pa border-brown green" [(ngModel)]="email" placeholder="Email" (keydown)="checkCampos($event)">
+      <span style="color:red">{{msemail}} </span>
+      <input type="text" class="input-pa border-brown green" [(ngModel)]="telefone" placeholder="Telefone" (keydown)="checkCampos($event)">
+      <span style="color:red">{{mstelefone}} </span>        
+      <input type="password" class="input-pa border-brown green" [(ngModel)]="senha" placeholder="Senha" (keydown)="checkCampos($event)">
+      <span style="color:red">{{mssenha}} </span>
+      <input type="password" class="input-pa border-brown green" [(ngModel)]="rsenha" placeholder="Repita a senha" (keydown)="checkCampos($event)">
+      <span style="color:red">{{msrsenha}} </span>
+    </div>
+    <div class="wrap-button">
+      <span class="bt-pa border-green green fs2" (click)="testecadastro()">CADASTRAR</span>
+    </div>
+
+  </ion-content>

@@ -1,0 +1,132 @@
+<ion-header *ngIf="showMsg === true">
+  <div class="wrap-header bg-teal">
+    <span>
+      <!-- <svg style="width:32px;height:32px" viewBox="0 0 24 24" menuToggle>
+        <path fill="#DEF3FA" d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" />
+      </svg> -->
+      <svg style="width:32px;height:32px" viewBox="0 0 24 24" (click)="goBack()">
+        <path fill="#f7f7f7" d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" />
+      </svg>
+    </span>
+    <span class="light-blue fs2">Henrique</span>
+    <span class="pos-pop">
+      <svg style="width:32px;height:32px" viewBox="0 0 24 24" (click)="showMenuPop()">
+        <path fill="#f7f7f7" d="M12,16A2,2 0 0,1 14,18A2,2 0 0,1 12,20A2,2 0 0,1 10,18A2,2 0 0,1 12,16M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10M12,4A2,2 0 0,1 14,6A2,2 0 0,1 12,8A2,2 0 0,1 10,6A2,2 0 0,1 12,4Z" />
+      </svg>
+    </span>
+  </div>
+  <div class="menu-pop" [ngClass]="{'slide-down':pop}" *ngIf="pop === true">
+    <span class="fs2">pontuação</span>
+    <span class="fs2">mais um</span>
+    <span class="fs2">indicação</span>
+    <span class="fs2" (click)="logout()">sair</span>
+  </div>
+</ion-header>
+
+
+
+<ion-content (click)="closePop()">
+  <div class="show-load" *ngIf="load === true">
+    <img src="image/load-bt.gif" alt="">
+  </div>
+  <div class="central fs3 blue">PEDIDOS</div>
+  <div class=" bg-white align-two-buttons">
+    <span class="bg-red white" (click)="noConfirm()">NÃO CONFIRMADOS</span>
+    <span class="bg-blue white" (click)="confirm()">CONFIRMADOS</span>
+  </div>
+  <div class="central fs3 green" *ngIf="selectPhrase === true">SELECIONE</div>
+  <div class="stoped central fs2 bg-blue white" *ngIf="ordersConfirm === true">CONFIRMADO</div>
+  <div *ngIf="ordersNoConfirm === true">
+    <span class="stoped central fs2 bg-red white">NÃO CONFIRMADO</span>
+
+    <div *ngIf="orders != 0; else msgNoOrders">
+      <div *ngFor="let data of orders">
+        <div class="box-orders">
+          <div>
+            <img src="{{data.img_business}}" alt="">
+          </div>
+          <div class="box-order-infos">
+            <span class="fs1 green">
+              {{data.nome_estab}}
+            </span>
+            <span class="fs2 blue">
+              {{data.data_pedido | date: 'dd/MM/yyyy'}}
+            </span>
+          </div>
+          <div class="box-order-icons">
+            <svg style="width:32px;height:32px" viewBox="0 0 24 24" (click)="viewOrder(data.n_pedido)">
+              <path fill="#4DB3D8" d="M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9M12,4.5C17,4.5 21.27,7.61 23,12C21.27,16.39 17,19.5 12,19.5C7,19.5 2.73,16.39 1,12C2.73,7.61 7,4.5 12,4.5M3.18,12C4.83,15.36 8.24,17.5 12,17.5C15.76,17.5 19.17,15.36 20.82,12C19.17,8.64 15.76,6.5 12,6.5C8.24,6.5 4.83,8.64 3.18,12Z" />
+            </svg>
+          </div>
+          <div class="box-order-icons">
+            <svg style="width:32px;height:32px" viewBox="0 0 24 24" (click)="deleteOrdersByorderNoConfirm(data.n_pedido)">
+              <path fill="#E98B83" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ng-template #msgNoOrders>
+      <div class="red central mt10">
+        Nenhum produto encontrado!
+      </div>
+    </ng-template>
+
+  </div>
+
+
+</ion-content>
+<div class="modal" [ngClass]="{'zoom-modal' : animeModal}" *ngIf="modalViewNoConfirm === true">
+  <span class="close-modal">
+    <svg style="width:45px;height:45px" viewBox="0 0 24 24" (click)="closeModal()">
+      <path fill="#f7f7f7" d="M13.46,12L19,17.54V19H17.54L12,13.46L6.46,19H5V17.54L10.54,12L5,6.46V5H6.46L12,10.54L17.54,5H19V6.46L13.46,12Z" />
+    </svg>
+  </span>
+  <div class="show-load" *ngIf="load === true">
+    <img src="image/load-bt.gif" alt="">
+  </div>
+
+  <div *ngIf="countOrdersView > 0; else msgNoProducts">
+    <div *ngFor="let data of orderViewNoConfirm">
+      <div class="box-found">
+        <div class="bg-light-grey box-order-cart">
+          <div>
+            <span>{{data.nome_produto}}</span>
+            <span>
+              <img src="{{data.img_prod}}" alt="">
+            </span>
+          </div>
+          <div>
+            <span>VALOR PRODUTO</span>
+            <span>{{data.vlr_produto | currency:'BRL':true}}</span>
+          </div>
+          <div>
+            <span>QTD</span>
+            <span>{{data.qtd}}</span>
+          </div>
+          <div>
+            <span>TOTAL</span>
+            <span>{{data.vlr_total | currency:'BRL':true}}</span>
+          </div>
+          <div>
+            <span>
+              <svg style="width:50px;height:50px" viewBox="0 0 24 24" (click)="deleteItem(data.id_pedido,data.n_pedido)">
+                <path fill="#E98B83" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" />
+              </svg>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-template #msgNoProducts>
+    <div class="bg-white red central mt10">
+      Nenhum produto encontrado!
+    </div>
+  </ng-template>
+  <div class="load-in-cart"*ngIf="loadInCart === true">
+    <img src="image/load.gif" alt="">
+  </div>
+
+
+</div>

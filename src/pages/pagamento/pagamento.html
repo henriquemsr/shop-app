@@ -1,0 +1,199 @@
+<ion-header *ngIf="hideHeader === false">
+  <div class="wrap-header bg-brown">
+    <span></span>
+    <span class="fs1 white">CONFIRMAÇÃO DE PAGAMENTO</span>
+    <span class="fs2 white">{{totalOrder | currency:'BRL':true}}</span>
+  </div>
+</ion-header>
+<ion-content>
+  <!-- <div class="box-address">
+    <h3 class="central green mt20">Endereço</h3>
+    <div class="fs2 central" *ngIf="showAdress === true">
+      <ion-list>
+        <ion-item>
+          <ion-select [(ngModel)]="idEnd">
+            <ion-option *ngFor="let end of totalend" value="{{end.id_end}}">{{end.rua_user}}</ion-option>
+          </ion-select>
+        </ion-item>
+      </ion-list>
+    </div>
+    <span (click)="openRegisterAdrress()" class="fs2">Inserir</span>
+  </div> -->
+
+  <h3 class="central green mt20">Opções de Pagamento</h3>
+  <span class="bt-pgto" (click)="choicePgtoMoney()" [ngClass]="{'bt-pgto-choice' : choiceMoney}">PAGAR NA ENTREGA</span>
+  <div *ngIf="choiceMoney === true" class="box-order-choice">
+
+    <span (click)="showCalendarChoiceDate()" class="central fs2 brown">
+      Escolha o dia da entrega
+      <svg style="width:32px;height:32px" viewBox="0 0 24 24">
+        <path fill="#444" d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" />
+      </svg>
+    </span>
+    <div padding [ngClass]="{'down' : showCalendar}" *ngIf="showCalendar === true">
+      <div class="calendar-header">
+        <div class="calendar-month">
+          <span class="click-back" (click)="goToLastMonth()">
+            <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+              <path fill="#fff" d="M11.92,19.92L4,12L11.92,4.08L13.33,5.5L7.83,11H22V13H7.83L13.34,18.5L11.92,19.92M4,12V2H2V22H4V12Z" />
+            </svg>
+          </span>
+          <span>{{currentMonth}} {{currentYear}}</span>
+          <span class="click-go" (click)="goToNextMonth()">
+            <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+              <path fill="#fff" d="M12.08,4.08L20,12L12.08,19.92L10.67,18.5L16.17,13H2V11H16.17L10.67,5.5L12.08,4.08M20,12V22H22V2H20V12Z" />
+            </svg>
+          </span>
+        </div>
+      </div>
+      <div class="calendar-body">
+        <div>
+          <div class="calendar-weekday">
+            <span>DOM</span>
+            <span>SEG</span>
+            <span>TER</span>
+            <span>QUA</span>
+            <span>QUI</span>
+            <span>SEX</span>
+            <span>SAB</span>
+          </div>
+          <div class="calendar-date">
+            <span *ngFor="let lastDay of daysInLastMonth" class="last-month column-calendar">{{lastDay}}</span>
+            <span class="column-calendar" *ngFor="let day of daysInThisMonth" (click)="getDay(day)">
+              <span>{{day}}</span>
+            </span>
+            <span *ngFor="let nextDay of daysInNextMonth" class="next-month column-calendar">{{nextDay}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <span class="central fs2 green" [ngClass]="{'down' : showPeriod}" *ngIf="showPeriod === true">
+      {{dia}} {{currentMonth}} {{currentYear}}
+    </span>
+    <span class="central fs2 brown" *ngIf="showPeriod === true">Selecione período:</span>
+    <div class="period" [ngClass]="{'down' : showPeriod}" *ngIf="showPeriod === true">
+      <span (click)="morning()" [ngClass]="{'bt-choice-perido' : choiceMorning}">manhã</span>
+      <span (click)="afternoon()" [ngClass]="{'bt-choice-perido' : choiceAfternoon}">tarde</span>
+      <span (click)="night()" [ngClass]="{'bt-choice-perido' : choiceNight}">noite</span>
+    </div>
+
+    <div class="central bt-finalizar-pgto" [ngClass]="{'down' : btConfirm}" *ngIf="btConfirm === true">FINALIZAR:
+      {{totalOrder | currency:'BRL':true}}</div>
+  </div>
+  <span class="bt-pgto" (click)="choicePgtoCard()" [ngClass]="{'bt-pgto-choice' : choiceCard}">CARTÃO DE CRÉDITO</span>
+  <div *ngIf="choiceCard === true" class="box-order-choice">
+    <span class="central fs1 brown">
+      Forma de Pagamento escolhida:
+    </span>
+    <span class="central fs2 brown">
+      Cartão deCrédito
+    </span>
+    <div class="wrap-input">
+      <input type="text" [(ngModel)]="numberCard" class="input-pa border-brown blue" placeholder="Número do cartão">
+      <input type="text" [(ngModel)]="nameCard" class="input-pa border-brown blue" placeholder="Nome do cartão">
+      <div class="central-input">
+        <input type="text" [(ngModel)]="ExpCard" class="input-pa border-brown blue" placeholder="Expiração">
+        <input type="text" [(ngModel)]="ExpCard" class="input-pa border-brown blue" placeholder="CVV">
+      </div>
+    </div>
+
+
+
+    <span (click)="showCalendarChoiceDate()" class="central fs2 brown">
+      Escolha o dia da entrega
+      <svg style="width:32px;height:32px" viewBox="0 0 24 24">
+        <path fill="#444" d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" />
+      </svg>
+    </span>
+    <div padding [ngClass]="{'down' : showCalendar}" *ngIf="showCalendar === true">
+      <div class="calendar-header">
+        <div class="calendar-month">
+          <span class="click-back" (click)="goToLastMonth()">
+            <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+              <path fill="#fff" d="M11.92,19.92L4,12L11.92,4.08L13.33,5.5L7.83,11H22V13H7.83L13.34,18.5L11.92,19.92M4,12V2H2V22H4V12Z" />
+            </svg>
+          </span>
+          <span>{{currentMonth}} {{currentYear}}</span>
+          <span class="click-go" (click)="goToNextMonth()">
+            <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+              <path fill="#fff" d="M12.08,4.08L20,12L12.08,19.92L10.67,18.5L16.17,13H2V11H16.17L10.67,5.5L12.08,4.08M20,12V22H22V2H20V12Z" />
+            </svg>
+          </span>
+        </div>
+      </div>
+      <div class="calendar-body">
+        <div>
+          <div class="calendar-weekday">
+            <span>DOM</span>
+            <span>SEG</span>
+            <span>TER</span>
+            <span>QUA</span>
+            <span>QUI</span>
+            <span>SEX</span>
+            <span>SAB</span>
+          </div>
+          <div class="calendar-date">
+            <span *ngFor="let lastDay of daysInLastMonth" class="last-month column-calendar">{{lastDay}}</span>
+            <span class="column-calendar" *ngFor="let day of daysInThisMonth" (click)="getDay(day)">
+              <span>{{day}}</span>
+            </span>
+            <span *ngFor="let nextDay of daysInNextMonth" class="next-month column-calendar">{{nextDay}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <span class="central fs2 green" [ngClass]="{'down' : showPeriod}" *ngIf="showPeriod === true">
+      {{dia}} {{currentMonth}} {{currentYear}}
+    </span>
+    <span class="central fs2 brown" *ngIf="showPeriod === true">Selecione período:</span>
+    <div class="period" [ngClass]="{'down' : showPeriod}" *ngIf="showPeriod === true">
+      <span (click)="morning()" [ngClass]="{'bt-choice-perido' : choiceMorning}">manhã</span>
+      <span (click)="afternoon()" [ngClass]="{'bt-choice-perido' : choiceAfternoon}">tarde</span>
+      <span (click)="night()" [ngClass]="{'bt-choice-perido' : choiceNight}">noite</span>
+    </div>
+
+
+
+
+
+    <span class="central fs2 brown">Total: {{totalOrder | currency:'BRL':true}}</span>
+    <div class="central bt-finalizar-pgto">PCO TA FINALIZANDO!</div>
+  </div>
+
+  <div class="modal" *ngIf="checkDate === true">
+    <span class="close-modal">
+      <svg style="width:45px;height:45px" viewBox="0 0 24 24" (click)="closeInfo()">
+        <path fill="#444" d="M13.46,12L19,17.54V19H17.54L12,13.46L6.46,19H5V17.54L10.54,12L5,6.46V5H6.46L12,10.54L17.54,5H19V6.46L13.46,12Z" />
+      </svg>
+    </span>
+    <span class="central fs2 red mt100">
+      {{dia}} {{currentMonth}} {{currentYear}}
+    </span>
+    <span class="central fs1 red">
+      Data Informada não pode ser maior que data de hoje!
+    </span>
+  </div>
+  <!-- <div class="modal" [ngClass]="{'zoom-modal' : modalRegister}" *ngIf="modalRegister === true">
+    <span class="close-modal">
+      <svg style="width:45px;height:45px" viewBox="0 0 24 24" (click)="closeModalRegister()">
+        <path fill="#444" d="M13.46,12L19,17.54V19H17.54L12,13.46L6.46,19H5V17.54L10.54,12L5,6.46V5H6.46L12,10.54L17.54,5H19V6.46L13.46,12Z" />
+      </svg>
+    </span>
+
+
+
+    <span style="position:relative;display:flex;flex-direction:row"><input type="text" class="input-pa border-brown green"
+        style="position:relative;float:left;right:2rem" [(ngModel)]="cep" placeholder="Cep"><button ion-button color="secondary"
+        style="position:relative;float:right;top:2rem;left:2rem" (click)="getEndereco($event)">Buscar</button></span>
+    <input type="text" class="input-pa border-brown green" [(ngModel)]="rua" placeholder="Rua">
+    <input type="text" class="input-pa border-brown green" [(ngModel)]="bairro" placeholder="Bairro">
+    <input type="number" class="input-pa border-brown green" [(ngModel)]="numero" placeholder="Numero">
+    <input type="text" class="input-pa border-brown green" [(ngModel)]="comple" placeholder="Complemento">
+    <input type="text" class="input-pa border-brown green" [(ngModel)]="cidade" placeholder="Cidade">
+    <input type="text" class="input-pa border-brown green" [(ngModel)]="estado" placeholder="Estado">
+    <div class="wrap-button">
+      <span class="bt-pa border-green green fs2" (click)="cadAdress()">CADASTRAR</span>
+    </div>
+
+  </div> -->
+</ion-content>
